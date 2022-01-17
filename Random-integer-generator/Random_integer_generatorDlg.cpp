@@ -197,12 +197,6 @@ LRESULT CRandom_integer_generatorDlg::OnNcHitTest(CPoint point)
 void CRandom_integer_generatorDlg::OnBnClickedBtnOpenm()
 {
 	// TODO: 在此添加控件通知处理程序代码
-
-	CRect rectDlg;
-	GetWindowRect(rectDlg);
-	CString xx;
-	xx.Format(_T("%d"), rectDlg.top);
-	MessageBox(xx);
 	MA* pOneDlgObj = new MA;
 	if (pOneDlgObj)
 	{

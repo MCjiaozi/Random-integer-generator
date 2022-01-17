@@ -162,6 +162,7 @@ void MA::DoDataExchange(CDataExchange* pDX)
 	GetDlgItem(IDC_EDIT_MAX)->SetWindowText(get_max);
 	GetDlgItem(IDC_EDIT_TIMES)->SetWindowText(get_times);
 	if (get_allow_repetition == _T("TRUE"))((CButton*)GetDlgItem(IDC_CHECK_R))->SetCheck(1);
+	srand(unsigned(time(0)));
 }
 
 
@@ -178,6 +179,13 @@ END_MESSAGE_MAP()
 void MA::OnBnClickedBtnStart()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	static SYSTEMTIME sys;
+	static WORD before = 0;
+	static WORD cur;
+	GetLocalTime(&sys);
+	cur = sys.wMinute * 60 + sys.wSecond * 1000 + sys.wMilliseconds;
+	if(cur - before>=1000)srand(unsigned(time(0)));
+	before = cur;
 	CStringArray output;
 	CString str_min;
 	CString str_max;
