@@ -5,6 +5,7 @@
 #include "Random_integer_generator.h"
 #include "afxdialogex.h"
 #include "MA.h"
+#include <random>
 
 
 // MA 对话框
@@ -186,13 +187,15 @@ void MA::OnBnClickedBtnStart()
 	cur = sys.wMinute * 60 + sys.wSecond * 1000 + sys.wMilliseconds;
 	if(cur - before>=1000)srand(unsigned(time(0)));
 	before = cur;
+    std::mt19937_64 gen64;
+	//long int x = gen64();
 	CStringArray output;
 	CString str_min;
 	CString str_max;
 	CString times;
 	BOOL ifc;
 	BOOL ifcy;
-	int num;
+	unsigned long long num;
 	CString Cnum;
 	GetDlgItem(IDC_EDIT_MIN)->GetWindowText(str_min);
 	GetDlgItem(IDC_EDIT_MAX)->GetWindowText(str_max);
@@ -201,26 +204,33 @@ void MA::OnBnClickedBtnStart()
 		ifc = TRUE;
 	}
 	else ifc = FALSE;
-	if(_wtoi(str_max)< _wtoi(str_min) || str_min.IsEmpty()|| str_max.IsEmpty() || times.IsEmpty()||(!ifc&& _wtoi(str_max)- _wtoi(str_min)+1<_wtoi(times))|| _wtoi(str_max) == INT_MAX)
+	std::random_device rd;
+	std::mt19937_64 rng{ rd() };
+	if(_wcstoui64(str_max,NULL,NULL)< _wcstoui64(str_min, NULL, NULL) || str_min.IsEmpty()|| str_max.IsEmpty() || times.IsEmpty()||(!ifc&& _wcstoui64(str_max,NULL,NULL)- _wcstoui64(str_min,NULL,NULL)+1< _wcstoui64(times, NULL, NULL))|| _wcstoui64(str_max,NULL,NULL) == INT_MAX)
 	{
 		CString errs = _T("错误：");
-		if (_wtoi(str_max) < _wtoi(str_min))errs += _T("\r\n最大值大于最小值");
+		if (_wcstoui64(str_max,NULL,NULL) < _wcstoui64(str_min,NULL,NULL))errs += _T("\r\n最大值大于最小值");
 		if (str_min.IsEmpty())errs += _T("\r\n最小值为空");
 		if (str_max.IsEmpty())errs += _T("\r\n最大值为空");
 		if (times.IsEmpty())errs += _T("\r\n次数为空");
-		if (!ifc && _wtoi(str_max) - _wtoi(str_min) + 1 < _wtoi(times))errs += _T("\r\n次数大于可取值个数");
-		if (_wtoi(str_max) == INT_MAX) {
+		if (!ifc && _wcstoui64(str_max,NULL,NULL) - _wcstoui64(str_min,NULL,NULL) + 1 < _wtoi(times))errs += _T("\r\n次数大于可取值个数");
+		if (_wcstoui64(str_max,NULL,NULL) == LLONG_MAX) {
+			CString i_max;
+			i_max.Format(_T("%lld"), LLONG_MAX);
+			errs += _T("\r\n最大值大于或等于LLONG_MAX(=")+i_max+_T(")");
+		}
+		if (_wtoi(times) == INT_MAX) {
 			CString i_max;
 			i_max.Format(_T("%d"), INT_MAX);
-			errs += _T("\r\n最大值大于或等于INT_MAX(=")+i_max+_T(")");
+			errs += _T("\r\n次数大于或等于INT_MAX(=") + i_max + _T(")");
 		}
 		MessageBox(errs, _T("错误"), MB_ICONERROR);
 		return;
 	}
-	int t = 1;
+	unsigned long long t = 1;
 	for (; t <= _wtoi(times);) {
-		num = rand() % (_wtoi(str_max) - _wtoi(str_min) + 1) + _wtoi(str_min);
-		Cnum.Format(_T("%d"), num);
+		num = rd() % (_wcstoui64(str_max,NULL,NULL) - _wcstoui64(str_min,NULL,NULL) + 1) + _wcstoui64(str_min,NULL,NULL);
+		Cnum.Format(_T("%lld"), num);
 		if (!ifc) {
 			ifcy = TRUE;
 			for (int xp = 0;xp< output.GetCount(); xp++) {
