@@ -32,6 +32,8 @@
 #define IDC_MFCLINK_GITHUB              1026
 #define IDC_MFCLINK2                    1027
 #define IDC_MFCLINK_WEBSITE             1028
+#define IDC_STATIC_TIMES_X              1029
+#define IDC_STATIC_TIMES_Y              1030
 
 // Next default values for new objects
 // 
@@ -39,7 +41,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        137
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1029
+#define _APS_NEXT_CONTROL_VALUE         1031
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

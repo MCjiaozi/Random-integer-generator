@@ -145,6 +145,8 @@ void MA::DoDataExchange(CDataExchange* pDX)
 	GetDlgItem(IDC_BUTTON_SAVE_CONFIG)->SetFont(k);
 	GetDlgItem(IDC_STATIC_SAVE)->SetFont(k);
 	GetDlgItem(IDC_STATIC_INF1)->SetFont(k);
+	GetDlgItem(IDC_STATIC_TIMES_X)->SetFont(k);
+	GetDlgItem(IDC_STATIC_TIMES_Y)->SetFont(k);
 	CString get_min;
 	CString get_max;
 	CString get_times;
@@ -206,7 +208,7 @@ void MA::OnBnClickedBtnStart()
 	else ifc = FALSE;
 	std::random_device rd;
 	std::mt19937_64 rng{ rd() };
-	if(_wcstoui64(str_max,NULL,NULL)< _wcstoui64(str_min, NULL, NULL) || str_min.IsEmpty()|| str_max.IsEmpty() || times.IsEmpty()||(!ifc&& _wcstoui64(str_max,NULL,NULL)- _wcstoui64(str_min,NULL,NULL)+1< _wcstoui64(times, NULL, NULL))|| _wcstoui64(str_max,NULL,NULL) == INT_MAX)
+	if(_wcstoui64(str_max,NULL,NULL)< _wcstoui64(str_min, NULL, NULL) || str_min.IsEmpty()|| str_max.IsEmpty() || times.IsEmpty()||(!ifc&& _wcstoui64(str_max,NULL,NULL)- _wcstoui64(str_min,NULL,NULL)+1< _wcstoui64(times, NULL, NULL))|| _wcstoui64(str_max, NULL, NULL) == ULLONG_MAX|| _wtoi(times) == INT_MAX)
 	{
 		CString errs = _T("错误：");
 		if (_wcstoui64(str_max,NULL,NULL) < _wcstoui64(str_min,NULL,NULL))errs += _T("\r\n最大值大于最小值");
@@ -214,10 +216,10 @@ void MA::OnBnClickedBtnStart()
 		if (str_max.IsEmpty())errs += _T("\r\n最大值为空");
 		if (times.IsEmpty())errs += _T("\r\n次数为空");
 		if (!ifc && _wcstoui64(str_max,NULL,NULL) - _wcstoui64(str_min,NULL,NULL) + 1 < _wtoi(times))errs += _T("\r\n次数大于可取值个数");
-		if (_wcstoui64(str_max,NULL,NULL) == LLONG_MAX) {
+		if (_wcstoui64(str_max,NULL,NULL) == ULLONG_MAX) {
 			CString i_max;
-			i_max.Format(_T("%lld"), LLONG_MAX);
-			errs += _T("\r\n最大值大于或等于LLONG_MAX(=")+i_max+_T(")");
+			i_max.Format(_T("%llu"), ULLONG_MAX);
+			errs += _T("\r\n最大值大于或等于ULLONG_MAX(=")+i_max+_T(")");
 		}
 		if (_wtoi(times) == INT_MAX) {
 			CString i_max;
@@ -228,9 +230,17 @@ void MA::OnBnClickedBtnStart()
 		return;
 	}
 	unsigned long long t = 1;
+	unsigned long long tt = 0;
+	CString real_t;
+	CString num_t;
+	CString p_times;
 	for (; t <= _wtoi(times);) {
+		real_t.Format(_T("%llu"), ++tt);
+		num_t.Format(_T("%llu"), t);
+		p_times = real_t + _T("\r\n") + num_t;
+		GetDlgItem(IDC_STATIC_TIMES_Y)->SetWindowText(p_times);
 		num = rd() % (_wcstoui64(str_max,NULL,NULL) - _wcstoui64(str_min,NULL,NULL) + 1) + _wcstoui64(str_min,NULL,NULL);
-		Cnum.Format(_T("%lld"), num);
+		Cnum.Format(_T("%llu"), num);
 		if (!ifc) {
 			ifcy = TRUE;
 			for (int xp = 0;xp< output.GetCount(); xp++) {
