@@ -270,9 +270,7 @@ void MA::OnBnClickedBtnStart()
 		else if ((i + 1) % 5 == 0 && static_cast<long long>(i) + 1 != output.GetCount())print_out += output[i] + _T("\r\n");
 		else print_out += output[i] + _T(" ");
 	}
-	CString xxxx;
-	GetDlgItem(IDC_EDIT_OUT)->GetWindowText(xxxx);
-	GetDlgItem(IDC_EDIT_OUT)->SetWindowText(xxxx+print_out);
+	GetDlgItem(IDC_EDIT_OUT)->SetWindowText(print_out);
 }
 
 
