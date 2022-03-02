@@ -34,6 +34,14 @@
 #define IDC_MFCLINK_WEBSITE             1028
 #define IDC_STATIC_TIMES_X              1029
 #define IDC_STATIC_TIMES_Y              1030
+#define IDC_BUTTON1                     1031
+#define IDC_MIN_CUT                     1031
+#define IDC_MIN_ADD                     1032
+#define IDC_MAX_CUT                     1033
+#define IDC_MAX_ADD                     1034
+#define IDC_TIMES_CUT                   1037
+#define IDC_TIMES_CUT2                  1038
+#define IDC_TIMES_ADD                   1038
 
 // Next default values for new objects
 // 
@@ -41,7 +49,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        137
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1031
+#define _APS_NEXT_CONTROL_VALUE         1032
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

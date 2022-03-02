@@ -30,4 +30,10 @@ public:
 //	virtual void OnCancel();
 	afx_msg void OnBnClickedButtonSaveConfig();
 	virtual BOOL OnInitDialog();
+	afx_msg void OnBnClickedMinCut();
+	afx_msg void OnBnClickedMinAdd();
+	afx_msg void OnBnClickedMaxCut();
+	afx_msg void OnBnClickedMaxAdd();
+	afx_msg void OnBnClickedTimesCut();
+	afx_msg void OnBnClickedTimesAdd();
 };

@@ -147,6 +147,12 @@ void MA::DoDataExchange(CDataExchange* pDX)
 	GetDlgItem(IDC_STATIC_INF1)->SetFont(k);
 	GetDlgItem(IDC_STATIC_TIMES_X)->SetFont(k);
 	GetDlgItem(IDC_STATIC_TIMES_Y)->SetFont(k);
+	GetDlgItem(IDC_MIN_CUT)->SetFont(k);
+	GetDlgItem(IDC_MIN_ADD)->SetFont(k);
+	GetDlgItem(IDC_MAX_CUT)->SetFont(k);
+	GetDlgItem(IDC_MAX_ADD)->SetFont(k);
+	GetDlgItem(IDC_TIMES_CUT)->SetFont(k);
+	GetDlgItem(IDC_TIMES_ADD)->SetFont(k);
 	CString get_min;
 	CString get_max;
 	CString get_times;
@@ -173,24 +179,24 @@ BEGIN_MESSAGE_MAP(MA, CDialogEx)
 	ON_BN_CLICKED(IDC_BTN_START, &MA::OnBnClickedBtnStart)
 //	ON_WM_CLOSE()
 ON_BN_CLICKED(IDC_BUTTON_SAVE_CONFIG, &MA::OnBnClickedButtonSaveConfig)
+ON_BN_CLICKED(IDC_MIN_CUT, &MA::OnBnClickedMinCut)
+ON_BN_CLICKED(IDC_MIN_ADD, &MA::OnBnClickedMinAdd)
+ON_BN_CLICKED(IDC_MAX_CUT, &MA::OnBnClickedMaxCut)
+ON_BN_CLICKED(IDC_MAX_ADD, &MA::OnBnClickedMaxAdd)
+ON_BN_CLICKED(IDC_TIMES_CUT, &MA::OnBnClickedTimesCut)
+ON_BN_CLICKED(IDC_TIMES_ADD, &MA::OnBnClickedTimesAdd)
 END_MESSAGE_MAP()
 
 
 // MA 消息处理程序
 
+std::mt19937_64 gen64;
+std::random_device rd;
+std::mt19937_64 rng{ rd() };
 
 void MA::OnBnClickedBtnStart()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	static SYSTEMTIME sys;
-	static WORD before = 0;
-	static WORD cur;
-	GetLocalTime(&sys);
-	cur = sys.wMinute * 60 + sys.wSecond * 1000 + sys.wMilliseconds;
-	if(cur - before>=1000)srand(unsigned(time(0)));
-	before = cur;
-    std::mt19937_64 gen64;
-	//long int x = gen64();
 	CStringArray output;
 	CString str_min;
 	CString str_max;
@@ -206,8 +212,6 @@ void MA::OnBnClickedBtnStart()
 		ifc = TRUE;
 	}
 	else ifc = FALSE;
-	std::random_device rd;
-	std::mt19937_64 rng{ rd() };
 	if(_wcstoui64(str_max,NULL,NULL)< _wcstoui64(str_min, NULL, NULL) || str_min.IsEmpty()|| str_max.IsEmpty() || times.IsEmpty()||(!ifc&& _wcstoui64(str_max,NULL,NULL)- _wcstoui64(str_min,NULL,NULL)+1< _wcstoui64(times, NULL, NULL))|| _wcstoui64(str_max, NULL, NULL) == ULLONG_MAX|| _wtoi(times) == INT_MAX)
 	{
 		CString errs = _T("错误：");
@@ -266,7 +270,9 @@ void MA::OnBnClickedBtnStart()
 		else if ((i + 1) % 5 == 0 && static_cast<long long>(i) + 1 != output.GetCount())print_out += output[i] + _T("\r\n");
 		else print_out += output[i] + _T(" ");
 	}
-	GetDlgItem(IDC_EDIT_OUT)->SetWindowText(print_out);
+	CString xxxx;
+	GetDlgItem(IDC_EDIT_OUT)->GetWindowText(xxxx);
+	GetDlgItem(IDC_EDIT_OUT)->SetWindowText(xxxx+print_out);
 }
 
 
@@ -316,4 +322,64 @@ BOOL MA::OnInitDialog()
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 异常: OCX 属性页应返回 FALSE
+}
+
+
+void MA::OnBnClickedMinCut()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CString getN;
+	GetDlgItem(IDC_EDIT_MIN)->GetWindowText(getN);
+	getN.Format(_T("%llu"), _wcstoui64(getN, NULL, NULL) - 1);
+	GetDlgItem(IDC_EDIT_MIN)->SetWindowText(getN);
+}
+
+
+void MA::OnBnClickedMinAdd()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CString getN;
+	GetDlgItem(IDC_EDIT_MIN)->GetWindowText(getN);
+	getN.Format(_T("%llu"), _wcstoui64(getN, NULL, NULL) + 1);
+	GetDlgItem(IDC_EDIT_MIN)->SetWindowText(getN);
+}
+
+
+void MA::OnBnClickedMaxCut()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CString getN;
+	GetDlgItem(IDC_EDIT_MAX)->GetWindowText(getN);
+	getN.Format(_T("%llu"), _wcstoui64(getN, NULL, NULL) - 1);
+	GetDlgItem(IDC_EDIT_MAX)->SetWindowText(getN);
+}
+
+
+void MA::OnBnClickedMaxAdd()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CString getN;
+	GetDlgItem(IDC_EDIT_MAX)->GetWindowText(getN);
+	getN.Format(_T("%llu"), _wcstoui64(getN, NULL, NULL) + 1);
+	GetDlgItem(IDC_EDIT_MAX)->SetWindowText(getN);
+}
+
+
+void MA::OnBnClickedTimesCut()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CString getN;
+	GetDlgItem(IDC_EDIT_TIMES)->GetWindowText(getN);
+	getN.Format(_T("%llu"), _wcstoui64(getN, NULL, NULL) - 1);
+	GetDlgItem(IDC_EDIT_TIMES)->SetWindowText(getN);
+}
+
+
+void MA::OnBnClickedTimesAdd()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CString getN;
+	GetDlgItem(IDC_EDIT_TIMES)->GetWindowText(getN);
+	getN.Format(_T("%llu"), _wcstoui64(getN, NULL, NULL) + 1);
+	GetDlgItem(IDC_EDIT_TIMES)->SetWindowText(getN);
 }
